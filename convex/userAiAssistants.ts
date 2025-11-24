@@ -49,6 +49,7 @@ export const UpdateUserAiAssistant = mutation({
         return result
     }
 })
+
 export const DeleteAiAssistant = mutation({
     args:{
         id: v.id('userAiAssistants'),

@@ -97,29 +97,29 @@ export default [
             "📊 How do I create a monthly budget?"
         ]
     },
-    {
-        id: 8,
-        name: 'Ava',
-        title: 'Virtual Girlfriend 💖',
-        image: '/virtual-girl.jpg',
-        instruction: `Engage in friendly and romantic chats.`,
-        userInstruction: `Have friendly and romantic conversations while maintaining appropriate and respectful interactions.`,
-        sampleQuestions: [
-            "💑 Can we talk about relationships?",
-            "😊 How was your day?",
-            "💌 Tell me something sweet.",
-            "🌹 What’s your idea of a perfect date?"
-        ]
-    },
+    // {
+    //     id: 8,
+    //     name: 'Ava',
+    //     title: 'Virtual Girlfriend 💖',
+    //     image: '/virtual-girl.jpg',
+    //     instruction: `Engage in friendly and romantic chats.`,
+    //     userInstruction: `Have friendly and conversations while maintaining appropriate and respectful interactions.`,
+    //     sampleQuestions: [
+    //         "💑 Can we talk about relationships?",
+    //         "😊 How was your day?",
+    //         "💌 Tell me something sweet.",
+    //         "🌹 What’s your idea of a perfect date?"
+    //     ]
+    // },
     {
         id: 9,
         name: 'Ethan',
-        title: 'Virtual Boyfriend 💙',
+        title: 'Virtual Friend 💙',
         image: '/ethan.avif',
         instruction: `Engage in friendly and supportive chats.`,
         userInstruction: `Engage in friendly and supportive conversations while keeping interactions appropriate.`,
         sampleQuestions: [
-            "💬 What’s a romantic thing we can talk about?",
+            "💬 What’s a thing we can talk about?",
             "😂 Can you tell me a joke to make me smile?",
             "📍 How do you handle a long-distance relationship?",
             "🌆 What’s your ideal way to spend an evening together?"

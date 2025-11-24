@@ -41,38 +41,38 @@ const AssistantsList = () => {
       <h2 className='font-bold text-lg'>Your Personal AI Assistants</h2>
 
       <AddNewAssistant>
-              <Button className='w-full mt-3'>+ Add New Assistant</Button>
+        <Button className='w-full mt-3'>+ Add New Assistant</Button>
 
       </AddNewAssistant>
-      <Input className='bg-white mt-3' placeholder='Search' />
+      <Input className='bg-white mt-3' placeholder='Search...' />
 
-<div className='mt-5 h-[400px] overflow-y-auto pr-2 custom-scrollbar'>
-  {assistantsList.map((assistant_, index) => (
-    <BlurFade key={assistant_.image} delay={0.25 + index * 0.05} inView>
-      <div
-        key={index}
-        className={`p-4 cursor-pointer flex gap-3 items-center
+      <div className='mt-5 h-[400px] overflow-y-auto pr-2 custom-scrollbar'>
+        {assistantsList.map((assistant_, index) => (
+          <BlurFade key={assistant_.image} delay={0.25 + index * 0.05} inView>
+            <div
+              key={index}
+              className={`p-4 cursor-pointer flex gap-3 items-center
         hover:bg-gray-200 hover:dark:bg-gray-800 rounded-xl
         ${assistant_.id === assistant?.id ? 'bg-gray-400' : ''}`}
-        onClick={() => setAssistant(assistant_)}
-      >
-        <Image
-          src={assistant_.image}
-          alt={`${assistant_.name} Image`}
-          width={60}
-          height={60}
-          className='rounded-xl w-[60px] h-[60px] object-cover'
-        />
-        <div>
-          <h2 className='font-bold'>{assistant_.name}</h2>
-          <h2 className='text-gray-600 text-sm dark:text-gray-300'>
-            {assistant_.title}
-          </h2>
-        </div>
+              onClick={() => setAssistant(assistant_)}
+            >
+              <Image
+                src={assistant_.image}
+                alt={`${assistant_.name} Image`}
+                width={60}
+                height={60}
+                className='rounded-xl w-[60px] h-[60px] object-cover'
+              />
+              <div>
+                <h2 className='font-bold'>{assistant_.name}</h2>
+                <h2 className='text-gray-600 text-sm dark:text-gray-300'>
+                  {assistant_.title}
+                </h2>
+              </div>
+            </div>
+          </BlurFade>
+        ))}
       </div>
-    </BlurFade>
-  ))}
-</div>
 
 
 
