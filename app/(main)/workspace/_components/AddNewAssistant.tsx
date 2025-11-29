@@ -35,6 +35,12 @@ import { AuthContext } from '@/context/AuthContext'
 import { AssistantContext } from '@/context/AssistantContext'
 import type { ASSISTANT } from '../../ai-assistants/page'
 
+/* --------------------------- FIXED PROPS INTERFACE --------------------------- */
+interface AddNewAssistantProps {
+  children: React.ReactNode
+  onAssistantAdded?: () => Promise<void> | void
+}
+
 const DEFAULT_ASSISTANT: ASSISTANT = {
   id: 0,
   name: '',
@@ -46,8 +52,10 @@ const DEFAULT_ASSISTANT: ASSISTANT = {
   aiModelId: ''
 }
 
-const AddNewAssistant = ({ children }: { children: React.ReactNode }) => {
-  const [selectedAssistant, setSelectedAssistant] = useState<ASSISTANT>(DEFAULT_ASSISTANT)
+/* --------------------------- FIXED COMPONENT START --------------------------- */
+const AddNewAssistant = ({ children, onAssistantAdded }: AddNewAssistantProps) => {
+  const [selectedAssistant, setSelectedAssistant] =
+    useState<ASSISTANT>(DEFAULT_ASSISTANT)
   const [loading, setLoading] = useState(false)
 
   const addAssistant = useMutation(api.userAiAssistants.insertSelectedAssistants)
@@ -71,11 +79,17 @@ const AddNewAssistant = ({ children }: { children: React.ReactNode }) => {
 
     try {
       setLoading(true)
+
       await addAssistant({
         records: [selectedAssistant],
         uid: user?._id
       })
+
       toast.success('New assistant added!')
+
+      // IMPORTANT: 🔥 CALL CALLBACK AFTER SAVE
+      if (onAssistantAdded) await onAssistantAdded()
+
       setAssistant(null)
       setSelectedAssistant(DEFAULT_ASSISTANT)
     } catch (error) {
@@ -88,11 +102,13 @@ const AddNewAssistant = ({ children }: { children: React.ReactNode }) => {
   return (
     <Dialog>
       <DialogTrigger asChild>{children}</DialogTrigger>
+
       <DialogContent>
         <DialogHeader>
           <DialogTitle>Add New Assistant</DialogTitle>
-          <DialogDescription asChild>
+          <DialogDescription>
             <div className="grid grid-cols-3 gap-5 mt-4">
+
               {/* Sidebar */}
               <div className="border-r pr-4">
                 <Button
@@ -124,11 +140,15 @@ const AddNewAssistant = ({ children }: { children: React.ReactNode }) => {
                 </div>
               </div>
 
-              {/* Main Form */}
+              {/* Right Side Form */}
               <div className="col-span-2 space-y-5">
-                {/* Avatar and Basic Inputs */}
+                {/* Avatar + Inputs */}
                 <div className="flex items-start gap-4">
-                  <AssistantAvtar selectedImage={(v: string) => handleInputChange('image', v)}>
+                  <AssistantAvtar
+                    selectedImage={(v: string) =>
+                      handleInputChange('image', v)
+                    }
+                  >
                     <Image
                       src={selectedAssistant.image}
                       alt={selectedAssistant.title || 'Assistant'}
@@ -142,31 +162,47 @@ const AddNewAssistant = ({ children }: { children: React.ReactNode }) => {
                     <Input
                       placeholder="Name of Assistant"
                       value={selectedAssistant.name}
-                      onChange={(e) => handleInputChange('name', e.target.value)}
+                      onChange={e =>
+                        handleInputChange('name', e.target.value)
+                      }
                     />
+
                     <Input
                       placeholder="Title of Assistant"
                       value={selectedAssistant.title}
-                      onChange={(e) => handleInputChange('title', e.target.value)}
+                      onChange={e =>
+                        handleInputChange('title', e.target.value)
+                      }
                     />
                   </div>
                 </div>
 
-                {/* Model Selector */}
+                {/* Model Select */}
                 <div>
-                  <h2 className="text-sm text-muted-foreground mb-1">Select Model</h2>
+                  <h2 className="text-sm text-muted-foreground mb-1">
+                    Select Model
+                  </h2>
+
                   <Select
-                    defaultValue={selectedAssistant.aiModelId}
-                    onValueChange={(value) => handleInputChange('aiModelId', value)}
+                    value={selectedAssistant.aiModelId}
+                    onValueChange={value =>
+                      handleInputChange('aiModelId', value)
+                    }
                   >
                     <SelectTrigger className="w-full bg-white">
                       <SelectValue placeholder="Select Model" />
                     </SelectTrigger>
+
                     <SelectContent>
                       {AiModelOptions.map((model, index) => (
                         <SelectItem key={index} value={model.edenAi}>
                           <div className="flex items-center gap-2">
-                            <Image src={model.logo} alt={model.name} width={20} height={20} />
+                            <Image
+                              src={model.logo}
+                              alt={model.name}
+                              width={20}
+                              height={20}
+                            />
                             <span>{model.name}</span>
                           </div>
                         </SelectItem>
@@ -175,32 +211,45 @@ const AddNewAssistant = ({ children }: { children: React.ReactNode }) => {
                   </Select>
                 </div>
 
-                {/* Instruction Textarea */}
+                {/* Instruction */}
                 <div>
-                  <h2 className="text-sm text-muted-foreground mb-1">User Instruction</h2>
+                  <h2 className="text-sm text-muted-foreground mb-1">
+                    User Instruction
+                  </h2>
+
                   <Textarea
                     className="h-[150px]"
                     placeholder="Add instructions..."
                     value={selectedAssistant.userInstruction}
-                    onChange={(e) => handleInputChange('userInstruction', e.target.value)}
+                    onChange={e =>
+                      handleInputChange('userInstruction', e.target.value)
+                    }
                   />
                 </div>
 
-                {/* Action Buttons */}
+                {/* Buttons */}
                 <div className="flex justify-end gap-3 pt-4">
-                  <DialogClose>
-                    <Button variant="secondary" onClick={() => setSelectedAssistant(DEFAULT_ASSISTANT)}>
-                    Cancel
-                  </Button>
+                  <DialogClose asChild>
+                    <Button
+                      variant="secondary"
+                      onClick={() =>
+                        setSelectedAssistant(DEFAULT_ASSISTANT)
+                      }
+                    >
+                      Cancel
+                    </Button>
                   </DialogClose>
 
                   <Button onClick={handleSave} disabled={loading}>
-                    {loading && <Loader2Icon className="w-4 h-4 mr-2 animate-spin" />}
-                    <DialogClose>
-                    Save
+                    {loading && (
+                      <Loader2Icon className="w-4 h-4 mr-2 animate-spin" />
+                    )}
+                    <DialogClose asChild>
+                      <span>Save</span>
                     </DialogClose>
                   </Button>
                 </div>
+
               </div>
             </div>
           </DialogDescription>

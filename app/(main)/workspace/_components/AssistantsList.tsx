@@ -1,4 +1,5 @@
 "use client";
+
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { AuthContext } from "@/context/AuthContext";
@@ -20,56 +21,54 @@ const AssistantsList = () => {
   const [searchQuery, setSearchQuery] = useState("");
   const { assistant, setAssistant } = useContext(AssistantContext);
 
-  useEffect(() => {
-    if (user) {
-      fetchAssistants();
-    }
-  }, [user]);
-
+  /* ---------------------- FETCH USER ASSISTANTS ---------------------- */
   const fetchAssistants = async () => {
+    if (!user?._id) return;
+
     try {
       const result = await convex.query(
         api.userAiAssistants.GetAllUserAssistants,
-        {
-          uid: user._id,
-        }
+        { uid: user._id }
       );
-      console.log("Assistants fetched:", result);
       setAssistantsList(result);
     } catch (error) {
       console.error("Error fetching assistants:", error);
     }
   };
 
-  // Filter assistants based on search query
-  const filteredAssistants = assistantsList.filter(
-    (assistant_) =>
-      assistant_.name.toLowerCase().includes(searchQuery.toLowerCase()) ||
-      assistant_.title.toLowerCase().includes(searchQuery.toLowerCase())
+  useEffect(() => {
+    if (user) fetchAssistants();
+  }, [user]);
+
+  /* -------------------------- SEARCH FILTER -------------------------- */
+  const filteredAssistants = assistantsList.filter((assistant_) =>
+    (assistant_.name + assistant_.title)
+      .toLowerCase()
+      .includes(searchQuery.toLowerCase())
   );
 
+  /* -------------------------- LOGOUT PLACEHOLDER -------------------------- */
   const handleLogout = () => {
-    // Add your logout logic here
     console.log("Logout clicked");
   };
 
   return (
     <div className="p-5 bg-secondary border-r-[1px] h-screen relative flex flex-col">
-      {/* Header */}
       <div className="flex-1">
         <h2 className="font-bold text-lg text-gray-800 dark:text-white">
           Your Personal AI Assistants
         </h2>
 
+        {/* Add New Assistant Button */}
         <AddNewAssistant onAssistantAdded={fetchAssistants}>
           <Button className="w-full mt-3 bg-blue-500 hover:bg-blue-600">
             + Add New Assistant
           </Button>
         </AddNewAssistant>
 
-        {/* Search Input */}
+        {/* Search Box */}
         <div className="relative mt-3">
-          <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400 w-4 h-4" />
+          <Search className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400 w-4 h-4" />
           <Input
             className="bg-white pl-10 border-gray-200 focus:border-blue-500"
             placeholder="Search assistants..."
@@ -105,14 +104,18 @@ const AssistantsList = () => {
           ) : (
             filteredAssistants.map((assistant_, index) => (
               <BlurFade
-                key={assistant_.id || assistant_.image}
+                key={assistant_.id || assistant_.name + index}
                 delay={0.25 + index * 0.05}
                 inView
               >
                 <div
                   className={`p-4 cursor-pointer flex gap-3 items-center
                     hover:bg-gray-200 hover:dark:bg-gray-800 rounded-xl transition-colors duration-200
-                    ${assistant_.id === assistant?.id ? "bg-blue-100 border border-blue-300 dark:bg-blue-900" : "bg-white dark:bg-gray-900"}`}
+                    ${
+                      assistant_.id === assistant?.id
+                        ? "bg-blue-100 border border-blue-300 dark:bg-blue-900"
+                        : "bg-white dark:bg-gray-900"
+                    }`}
                   onClick={() => setAssistant(assistant_)}
                 >
                   <Image
@@ -122,6 +125,7 @@ const AssistantsList = () => {
                     height={60}
                     className="rounded-xl w-[60px] h-[60px] object-cover border"
                   />
+
                   <div className="flex-1 min-w-0">
                     <div className="flex items-center gap-2">
                       <h2 className="font-bold text-gray-800 dark:text-white truncate">
@@ -131,9 +135,11 @@ const AssistantsList = () => {
                         <div className="w-2 h-2 bg-blue-500 rounded-full"></div>
                       )}
                     </div>
+
                     <p className="text-gray-600 text-sm dark:text-gray-300 truncate">
                       {assistant_.title}
                     </p>
+
                     {assistant_.userInstruction && (
                       <p
                         className="text-xs text-gray-500 mt-1 truncate"
@@ -166,8 +172,10 @@ const AssistantsList = () => {
               <User className="w-6 h-6 text-gray-300" />
             </div>
           )}
+
           <div className="flex-1 min-w-0">
             <h2 className="font-bold truncate">{user?.name || "User"}</h2>
+
             <div className="flex items-center gap-2">
               {user?.orderId ? (
                 <>

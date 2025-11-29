@@ -126,7 +126,7 @@ const ChatUi = () => {
 
   // Helper function to extract important content
   const extractImportantContent = (text: string, segments: any[]) => {
-    const importantRegex = /(IMPORTANT:|NOTE:|TIP:|WARNING:)(.*?)(?=\n\n|$)/gis;
+    const importantRegex = /(IMPORTANT:|NOTE:|TIP:|WARNING:)(.*?)(?=\n\n|$)/gi;
     let match;
     let lastIndex = 0;
 

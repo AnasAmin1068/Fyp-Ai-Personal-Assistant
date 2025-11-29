@@ -1,30 +1,27 @@
 "use client";
 
 import { AuthContext } from "@/context/AuthContext";
-import { useContext } from "react";
+import { useContext, useEffect } from "react";
 import { useRouter } from "next/navigation";
 import Image from "next/image";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
-import { User, Mail, Calendar, Bot, Crown, ArrowLeft } from "lucide-react";
+import { User, Mail, Crown, ArrowLeft } from "lucide-react";
 import Header from "../_components/Header";
-
-// Mock data for selected AI assistants
-const selectedAssistants = [
-  { id: 1, name: "Code Assistant", specialty: "Programming Help" },
-  { id: 2, name: "Content Writer", specialty: "Content Creation" },
-  { id: 3, name: "Research Helper", specialty: "Data Analysis" },
-];
 
 export default function ProfilePage() {
   const { user } = useContext(AuthContext);
   const router = useRouter();
 
-  // Redirect if not authenticated
-  if (!user) {
-    router.push("/sign-in");
-    return null;
-  }
+  // Safe redirect — prevents SSR errors
+  useEffect(() => {
+    if (!user) {
+      router.push("/sign-in");
+    }
+  }, [user, router]);
+
+  // Don't render anything during redirect
+  if (!user) return null;
 
   return (
     <div className="min-h-screen bg-gray-50 dark:bg-gray-900">
@@ -32,6 +29,7 @@ export default function ProfilePage() {
 
       <main className="pt-20 pb-8">
         <div className="max-w-2xl mx-auto px-4 sm:px-6 lg:px-8">
+
           {/* Back Button */}
           <Button
             variant="ghost"
@@ -44,6 +42,7 @@ export default function ProfilePage() {
 
           {/* Profile Card */}
           <div className="bg-white dark:bg-gray-800 rounded-xl shadow-sm border border-gray-200 dark:border-gray-700 p-6">
+
             {/* Profile Header */}
             <div className="flex items-center gap-4 mb-6">
               <div className="relative">
@@ -54,13 +53,16 @@ export default function ProfilePage() {
                   height={80}
                   className="rounded-full border-2 border-gray-300 dark:border-gray-600"
                 />
-                {/* Online Status Indicator */}
+
+                {/* Online status */}
                 <div className="absolute bottom-1 right-1 w-4 h-4 bg-green-500 border-2 border-white dark:border-gray-800 rounded-full"></div>
               </div>
+
               <div className="flex-1">
                 <h1 className="text-2xl font-bold text-gray-900 dark:text-white">
                   {user.name}
                 </h1>
+
                 <div className="flex items-center gap-2 mt-1">
                   <Badge
                     variant="secondary"
@@ -68,6 +70,7 @@ export default function ProfilePage() {
                   >
                     Online
                   </Badge>
+
                   <Badge className="bg-blue-100 text-blue-700 dark:bg-blue-900 dark:text-blue-300">
                     <Crown className="w-3 h-3 mr-1" />
                     Free Plan
@@ -84,6 +87,7 @@ export default function ProfilePage() {
               </h2>
 
               <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+
                 {/* Name */}
                 <div className="flex items-center gap-3 p-3 bg-gray-50 dark:bg-gray-700 rounded-lg">
                   <User className="w-5 h-5 text-gray-500" />
@@ -122,8 +126,10 @@ export default function ProfilePage() {
                     </p>
                   </div>
                 </div>
+
               </div>
             </div>
+
           </div>
         </div>
       </main>
