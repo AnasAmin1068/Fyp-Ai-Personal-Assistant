@@ -1,29 +1,53 @@
 import { NextRequest, NextResponse } from "next/server";
-import { GoogleGenerativeAI } from "@google/generative-ai";
 
 export async function POST(req: NextRequest) {
   try {
-    const { userInput } = await req.json();
+    const { userInstruction, userInput } = await req.json();
 
-    // Initialize client with your API key
-    const genAI = new GoogleGenerativeAI(process.env.GOOGLE_AI_API_KEY!);
+    const response = await fetch(
+      "https://openrouter.ai/api/v1/chat/completions",
+      {
+        method: "POST",
+        headers: {
+          "Authorization": `Bearer ${process.env.OPENROUTER_API_KEY}`,
+          "Content-Type": "application/json",
+          "HTTP-Referer": "http://localhost:3000",
+          "X-Title": "NextJS Chat App"
+        },
+        body: JSON.stringify({
+          model: "mistralai/mistral-7b-instruct",
+          messages: [
+            {
+              role: "user",
+              content: `${userInstruction}. The user input "${userInput}"`
+            }
+          ]
+        })
+      }
+    );
 
-    // Use a free model that exists
-    const model = genAI.getGenerativeModel({ model: "gemini-2.0-flash" });
+    if (!response.ok) {
+      const err = await response.text();
+      console.error("OpenRouter Error:", err);
+      return NextResponse.json(
+        { role: "assistant", content: "❌ Model quota or API error." },
+        { status: response.status }
+      );
+    }
 
-    // Generate response
-    const result = await model.generateContent(userInput);
-    const text = result.response.text();
+    const data = await response.json();
+    const text = data.choices?.[0]?.message?.content || "";
 
     return NextResponse.json({
       role: "assistant",
-      content: text,
+      content: text
     });
+
   } catch (error) {
-    console.error("Google AI Error:", error);
-    return NextResponse.json({
-      role: "assistant",
-      content: "❌ Error generating response.",
-    });
+    console.error("Server Error:", error);
+    return NextResponse.json(
+      { role: "assistant", content: "❌ Server error." },
+      { status: 500 }
+    );
   }
 }

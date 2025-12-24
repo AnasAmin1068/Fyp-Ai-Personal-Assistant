@@ -114,11 +114,6 @@ const SignIn = () => {
               <span className="text-sm text-gray-600 dark:text-gray-400 hidden sm:block">
                 New to AI Assistant?
               </span>
-              {/* <Link href="/sign-up">
-                <Button variant="outline" className="hidden sm:flex">
-                  Create Account
-                </Button>
-              </Link> */}
             </div>
           </div>
         </div>
@@ -127,11 +122,11 @@ const SignIn = () => {
       <main className="pt-24 pb-8">
         <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
+            
             {/* Left Side - Login Form */}
             <div className="flex justify-center">
               <div className="w-full max-w-md">
                 <div className="bg-white/80 dark:bg-gray-800/80 backdrop-blur-sm rounded-2xl shadow-xl border border-gray-200 dark:border-gray-700 p-8">
-                  {/* Header */}
                   <div className="text-center mb-8">
                     <h1 className="text-3xl font-bold text-gray-900 dark:text-white mb-2">
                       Welcome Back
@@ -152,13 +147,6 @@ const SignIn = () => {
                       <div className="w-5 h-5 border-2 border-gray-300 border-t-blue-600 rounded-full animate-spin" />
                     ) : (
                       <>
-                        {/* <Image
-                          src="/google.svg"
-                          alt="Google"
-                          width={20}
-                          height={20}
-                          className="mr-3"
-                        /> */}
                         Continue with Google
                       </>
                     )}
@@ -228,8 +216,6 @@ const SignIn = () => {
                     );
                   })}
                 </div>
-
-                {/* Testimonial */}
               </div>
             </div>
           </div>

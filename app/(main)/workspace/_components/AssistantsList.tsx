@@ -58,7 +58,6 @@ const AssistantsList = () => {
         <h2 className="font-bold text-lg text-gray-800 dark:text-white">
           Your Personal AI Assistants
         </h2>
-
         {/* Add New Assistant Button */}
         <AddNewAssistant onAssistantAdded={fetchAssistants}>
           <Button className="w-full mt-3 bg-blue-500 hover:bg-blue-600">
@@ -111,10 +110,9 @@ const AssistantsList = () => {
                 <div
                   className={`p-4 cursor-pointer flex gap-3 items-center
                     hover:bg-gray-200 hover:dark:bg-gray-800 rounded-xl transition-colors duration-200
-                    ${
-                      assistant_.id === assistant?.id
-                        ? "bg-blue-100 border border-blue-300 dark:bg-blue-900"
-                        : "bg-white dark:bg-gray-900"
+                    ${assistant_.id === assistant?.id
+                      ? "bg-blue-100 border border-blue-300 dark:bg-blue-900"
+                      : "bg-white dark:bg-gray-900"
                     }`}
                   onClick={() => setAssistant(assistant_)}
                 >
@@ -158,7 +156,9 @@ const AssistantsList = () => {
 
       {/* User Profile Section */}
       <div className="bg-gray-700 text-white p-4 rounded-xl mt-auto">
+        <Link href="/profile" className="flex-1">
         <div className="flex gap-3 items-center mb-3">
+
           {user?.picture ? (
             <Image
               src={user.picture}
@@ -188,6 +188,7 @@ const AssistantsList = () => {
             </div>
           </div>
         </div>
+          </Link>
 
         <div className="flex gap-2 justify-between">
           <Link href="/ai-assistants" className="flex-1">
@@ -199,13 +200,16 @@ const AssistantsList = () => {
             </Button>
           </Link>
 
+
           <Button
             onClick={handleLogout}
             variant="outline"
             className="bg-gray-600 hover:bg-gray-500 border-gray-500 text-white"
-          >
-            <LogOut className="w-4 h-4" />
+          ><Link href="/sign-in" className="flex-1">
+              <LogOut className="w-4 h-4" />
+            </Link>
           </Button>
+
         </div>
       </div>
     </div>

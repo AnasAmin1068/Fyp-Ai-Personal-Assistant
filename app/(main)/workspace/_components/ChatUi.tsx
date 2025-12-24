@@ -211,7 +211,6 @@ const ChatUi = () => {
       timestamp: new Date(),
     };
     setMessages((prev) => [...prev, userMsg]);
-    setInput("");
     setLoading(true);
 
     try {
@@ -252,6 +251,7 @@ const ChatUi = () => {
     }
 
     setLoading(false);
+    setInput("");
   };
 
   const handleKeyPress = (e: React.KeyboardEvent) => {
