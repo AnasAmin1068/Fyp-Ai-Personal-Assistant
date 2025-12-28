@@ -388,7 +388,8 @@ const ChatUi = () => {
             return (
               <div
                 key={index}
-                className="whitespace-pre-wrap leading-relaxed text-gray-800 text-[15px] leading-7"
+                // className="whitespace-pre-wrap leading-relaxed text-gray-800 text-[15px] leading-7"
+                className="whitespace-pre-wrap text-gray-800 text-[15px] leading-7"
                 dangerouslySetInnerHTML={{ __html: segment.content }}
               />
             );
