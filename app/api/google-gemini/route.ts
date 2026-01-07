@@ -4,42 +4,24 @@ export async function POST(req: NextRequest) {
   try {
     const { userInstruction, userInput } = await req.json();
 
-    // const response = await fetch(
-    //   "https://openrouter.ai/api/v1/chat/completions",
-    //   {
-    //     method: "POST",
-    //     headers: {
-    //       "Authorization": `Bearer ${process.env.OPENROUTER_API_KEY}`,
-    //       "Content-Type": "application/json",
-    //       "HTTP-Referer": "http://localhost:3000",
-    //       "X-Title": "NextJS Chat App"
-    //     },
-    //     body: JSON.stringify({
-    //       model: "mistralai/mistral-7b-instruct",
-    //       messages: [
-    //         {
-    //           role: "user",
-    //           content: `${userInstruction}. The user input "${userInput}"`
-    //         }
-    //       ]
-    //     })
-    //   }
-    // );
-
 const response = await fetch(
   "https://api.openai.com/v1/chat/completions",
   {
     method: "POST",
     headers: {
-      "Authorization": `Bearer ${process.env.OPENAI_API_KEY}`, // Ensure your env variable is updated
+      "Authorization": `Bearer ${process.env.OPENAI_API_KEY}`,
       "Content-Type": "application/json"
     },
     body: JSON.stringify({
-      model: "gpt-4o", // Aap yahan gpt-4o ya gpt-3.5-turbo use kar sakte hain
+      model: "gpt-5-nano", 
       messages: [
         {
+          role: "assistant",
+          content: userInstruction
+        },
+        {
           role: "user",
-          content: `${userInstruction}. The user input "${userInput}"`
+          content: userInput
         }
       ]
     })
